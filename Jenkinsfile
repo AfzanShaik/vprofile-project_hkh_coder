@@ -3,7 +3,7 @@ pipeline {
     // This will pull the 'maven:3.8.6-jdk-11' Docker image and run all stages inside a container based on this image.
     agent {
         docker {
-            image 'maven:3.8.6-jdk-11' // Use a Maven image with JDK 11
+            image 'maven:3.8.6-jdk-17' // Use a Maven image with JDK 11
             args '-v $HOME/.m2:/root/.m2' // Mount Maven local repository for caching dependencies
         }
     }

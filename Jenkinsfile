@@ -1,8 +1,8 @@
 pipeline {
     agent {
         docker {
-            image 'chinayin/maven:3.9-jdk-17' // Use a Maven image with JDK 11
-            args '-v $HOME/.m2:/root/.m2'
+            image 'chinayin/maven:3.9-jdk-17'
+            args '-v $HOME/.m2:/root/.m2 -v /var/jenkins_home/tools:/var/jenkins_home/tools' // Added volume mount for tools
         }
     }
 
@@ -57,23 +57,18 @@ pipeline {
                 scannerHome = tool 'sonarscanner4'
             }
             steps {
-                script { // Added a 'script' block to allow multiple steps for troubleshooting
+                script {
                     echo "Sonar Scanner Home: ${scannerHome}"
                     echo "--- Listing contents of scanner bin directory for debugging ---"
-                    // List contents and their permissions
                     sh "ls -la ${scannerHome}/bin/"
 
                     echo "--- Making sonar-scanner executable ---"
-                    // Add execute permissions to the sonar-scanner script
                     sh "chmod +x ${scannerHome}/bin/sonar-scanner"
 
                     echo "--- Verifying sonar-scanner permissions after chmod ---"
-                    // Verify the permissions have been applied
                     sh "ls -la ${scannerHome}/bin/sonar-scanner"
 
                     withSonarQubeEnv('sonar-pro') {
-                        // Execute SonarQube analysis
-                        // Ensured the path to sonar-scanner is correct and parameters are properly escaped
                         sh '''${scannerHome}/bin/sonar-scanner \\
                             -Dsonar.projectKey=vprofile \\
                             -Dsonar.projectName=vprofile-repo \\

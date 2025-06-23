@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'maven:3.8.6-openjdk-17'
+            image 'chinayin/maven:3.9-jdk-17' // Use a Maven image with JDK 11
             args '-v $HOME/.m2:/root/.m2'
         }
     }
